@@ -3,9 +3,11 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-serif: 'Lora', serif;
-  --font-sans: 'Source Sans 3', sans-serif;
-  --font-heading: 'Lora', serif;
+  --font-serif: 'Cormorant Garamond', 'Lora', serif;
+  --font-sans: 'Crimson Pro', 'Source Sans 3', serif;
+  --font-heading: 'Cormorant Garamond', serif;
+  --font-display: 'Cinzel', serif;
+  --font-body: 'Crimson Pro', serif;
 
   --color-sage-50: #f4f7f4;
   --color-sage-100: #e6ede5;
@@ -40,7 +42,9 @@ html {
 }
 
 body {
-  font-family: 'Source Sans 3', sans-serif;
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.05rem;
+  line-height: 1.625;
   background-color: #fafaf7;
   color: #2d3b2d;
   margin: 0;
@@ -62,7 +66,23 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6, .font-heading {
-  font-family: 'Lora', serif;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+
+.font-display {
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.15em;
+}
+
+.font-body {
+  font-family: 'Crimson Pro', serif;
+}
+
+.font-serif {
+  font-family: 'Cormorant Garamond', serif;
 }
 
 /* Mencegah auto-zoom yang mengganggu di iOS Safari saat fokus ke input */
