@@ -15,13 +15,13 @@ export const Header = ({ onOpenCreateSemester }: HeaderProps) => {
   return (
     <header className="sticky top-0 z-30 flex min-h-16 w-full items-center justify-between border-b border-gray-200/80 dark:border-gray-800/80 bg-[#FAFAF7]/90 dark:bg-[#141814]/90 backdrop-blur-md px-4 sm:px-6 pt-[env(safe-area-inset-top,0px)]">
       {/* Brand on mobile */}
-      <div className="flex items-center gap-3 lg:hidden">
+      <div className="flex items-center gap-2.5 lg:hidden">
         <Logo variant="icon" size="sm" className="w-9 h-9" />
-        <div>
+        <div className="flex flex-col justify-center">
           <h1 className="text-base font-heading font-bold text-gray-900 dark:text-gray-100 leading-tight">
             SI-Acad
           </h1>
-          <p className="text-[10px] text-[#627F5C] dark:text-[#93AC91] font-medium leading-none">
+          <p className="text-[10px] text-[#627F5C] dark:text-[#93AC91] font-medium leading-none mt-0.5">
             Academic Companion
           </p>
         </div>

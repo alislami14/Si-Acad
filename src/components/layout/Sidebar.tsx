@@ -27,13 +27,13 @@ export const Sidebar = () => {
     <aside className="hidden lg:flex flex-col w-64 border-r border-gray-200/80 dark:border-gray-800/80 bg-[#FAFAF7] dark:bg-[#141814] h-screen sticky top-0 p-4 justify-between">
       <div className="space-y-6">
         {/* Brand */}
-        <div className="flex items-center gap-3 px-3 py-2">
-          <Logo variant="icon" size="md" className="w-10 h-10" />
-          <div>
-            <h1 className="font-heading font-bold text-lg text-gray-900 dark:text-gray-100 tracking-tight">
+        <div className="flex items-center gap-3 px-2 py-1">
+          <Logo variant="icon" size="md" className="w-11 h-11" />
+          <div className="flex flex-col justify-center">
+            <h1 className="font-heading font-bold text-lg text-gray-900 dark:text-gray-100 tracking-tight leading-tight">
               SI-Acad
             </h1>
-            <p className="text-[11px] text-[#627F5C] dark:text-[#93AC91] font-medium">
+            <p className="text-[11px] text-[#627F5C] dark:text-[#93AC91] font-medium leading-tight mt-0.5">
               Academic Companion
             </p>
           </div>
