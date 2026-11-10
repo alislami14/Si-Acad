@@ -1,8 +1,12 @@
+// @ts-nocheck
 // Supabase Edge Function: send-notifications
 // Triggered by pg_cron or HTTP webhook to dispatch pending notification jobs via Web Push
 
+// @ts-ignore
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
+// @ts-ignore
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.0";
+// @ts-ignore
 import webpush from "https://esm.sh/web-push@3.6.7";
 
 const corsHeaders = {
