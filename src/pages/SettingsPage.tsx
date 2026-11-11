@@ -7,6 +7,7 @@ import Tabs from '../components/ui/Tabs';
 import Card from '../components/ui/Card';
 import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
+import { Logo } from '../components/ui/Logo';
 
 export const SettingsPage = () => {
   const { profile, updateProfile } = useAuth();
@@ -121,6 +122,37 @@ export const SettingsPage = () => {
           </form>
         </Card>
       )}
+
+      {/* Footer Branding — AN ALISLAMI PROJECT */}
+      <div className="pt-6 pb-2">
+        <div className="p-6 rounded-2xl bg-white/70 dark:bg-[#161D16]/70 border border-gray-200/80 dark:border-gray-800/80 backdrop-blur-xs text-center space-y-4 shadow-2xs">
+          {/* Top: Logo, Name & Version Badge */}
+          <div className="flex items-center justify-center gap-3">
+            <Logo variant="icon" size="md" className="w-9 h-9" />
+            <div className="flex items-center gap-2.5">
+              <span className="font-heading font-bold text-xl sm:text-2xl text-gray-900 dark:text-gray-100 tracking-tight">
+                SI-Acad
+              </span>
+              <span className="px-2.5 py-0.5 text-xs font-mono font-semibold rounded-full border border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400">
+                v1.0
+              </span>
+            </div>
+          </div>
+          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 max-w-md mx-auto">
+            Sistem Informasi Akademik &amp; Perencana Perkuliahan Terintegrasi Mahasiswa
+          </p>
+
+          {/* Dotted Divider */}
+          <div className="border-t border-dashed border-gray-200 dark:border-gray-800/80 pt-4 space-y-1.5">
+            <p className="text-[11px] sm:text-xs font-medium tracking-wider uppercase text-gray-500 dark:text-gray-400">
+              VERSI PRODUKSI STABIL V1.0 &bull; &copy; 2026 SI-ACAD
+            </p>
+            <p className="font-display text-xs sm:text-sm tracking-[0.25em] font-bold text-emerald-600 dark:text-emerald-400 uppercase pt-0.5">
+              AN ALISLAMI PROJECT
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

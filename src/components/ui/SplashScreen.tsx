@@ -46,12 +46,17 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
       {/* Main Container */}
       <div className="flex flex-col items-center justify-center px-4 text-center">
         {/* Logo SI-Acad (Tanpa Latar Putih / Transparan, otomatis menyesuaikan Light & Dark Mode) */}
-        <div className="transform transition-all duration-700 ease-out animate-in fade-in zoom-in-90">
+        <div className="transform transition-all duration-700 ease-out animate-in fade-in zoom-in-90 flex flex-col items-center">
           <Logo variant="full" size="xl" className="w-56 h-auto sm:w-64" alt="SI-Acad Logo" />
+          <div className="mt-2.5 inline-flex items-center gap-1.5">
+            <span className="px-2.5 py-0.5 text-[11px] font-mono font-semibold rounded-full border border-[#7C9A76]/40 bg-[#7C9A76]/15 text-[#4D6449] dark:text-[#A8C5A0]">
+              v1.0
+            </span>
+          </div>
         </div>
 
         {/* Minimal Progress Bar (Indikator 2 Detik yang Halus) */}
-        <div className="mt-8 w-36 h-1 bg-gray-200 dark:bg-[#252E25] rounded-full overflow-hidden">
+        <div className="mt-6 w-36 h-1 bg-gray-200 dark:bg-[#252E25] rounded-full overflow-hidden">
           <div
             className="h-full bg-[#7C9A76] rounded-full transition-all duration-2000 ease-linear"
             style={{
@@ -61,10 +66,15 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
           />
         </div>
 
-        {/* Tagline */}
-        <p className="mt-3 text-xs tracking-wider uppercase font-medium text-[#627F5C] dark:text-[#93AC91] opacity-80">
-          Academic Companion
-        </p>
+        {/* Tagline & Attribution */}
+        <div className="mt-3.5 space-y-1">
+          <p className="text-xs tracking-wider uppercase font-medium text-[#627F5C] dark:text-[#93AC91] opacity-80">
+            Academic Companion
+          </p>
+          <p className="font-display text-[11px] tracking-[0.25em] font-bold text-emerald-600 dark:text-emerald-400 uppercase pt-0.5">
+            AN ALISLAMI PROJECT
+          </p>
+        </div>
       </div>
 
       <style>{`
