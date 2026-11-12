@@ -25,11 +25,12 @@ import LoadingSpinner from '../components/ui/LoadingSpinner';
 import PageGuide from '../components/ui/PageGuide';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../config/supabase';
+import { LocalStore } from '../lib/storage';
 
 export const GroupDetailPage = () => {
   const { id: groupId } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, isDemo } = useAuth();
   const { groups, deleteGroup, leaveGroup, regenerateCode } = useGroups();
 
   const [activeTab, setActiveTab] = useState<'dashboard' | 'rotation' | 'members'>('dashboard');
@@ -75,6 +76,16 @@ export const GroupDetailPage = () => {
   // Handle kick member
   const handleRemoveMember = async (memberId: string, memberName: string) => {
     if (window.confirm(`Keluarkan ${memberName} dari kelompok?`)) {
+      if (isDemo) {
+        const dGroups = LocalStore.getGroups('usr-demo-faisal');
+        const target = dGroups.find((g) => g.id === groupId);
+        if (target) {
+          target.members = (target.members || []).filter((m) => m.id !== memberId);
+          localStorage.setItem('siacad_demo_groups', JSON.stringify(dGroups));
+        }
+        window.location.reload();
+        return;
+      }
       await supabase.from('study_group_members').delete().eq('id', memberId);
       window.location.reload();
     }

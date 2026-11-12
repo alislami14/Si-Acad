@@ -26,6 +26,7 @@ import { ParsedKrsItem } from '../lib/krsParser';
 import { useAuth } from '../contexts/AuthContext';
 import { useSemester } from '../contexts/SemesterContext';
 import { supabase, isSupabaseConfigured } from '../config/supabase';
+import { LocalStore } from '../lib/storage';
 
 const DAYS = [
   { id: 1, name: 'Senin' },
@@ -54,6 +55,10 @@ export const SchedulePage = () => {
 
   // Pastikan selalu ada semester aktif yang sah di Supabase
   const ensureActiveSemesterId = async (): Promise<string> => {
+    if (isDemo) {
+      return 'sem-5-demo';
+    }
+
     if (activeSemester?.id && isUuid(activeSemester.id)) {
       return activeSemester.id;
     }
@@ -116,8 +121,23 @@ export const SchedulePage = () => {
   // Import KRS / Excel Modal
   const [isImportModalOpen, setIsImportModalOpen] = useState(false);
 
-  // Fetch courses & schedules langsung dari Supabase
+  // Fetch courses & schedules langsung dari Supabase atau LocalStore
   const fetchData = useCallback(async () => {
+    if (isDemo) {
+      setLoading(true);
+      const demoCourses = LocalStore.getCourses('usr-demo-faisal');
+      const demoSchedules = LocalStore.getSchedules('usr-demo-faisal');
+      const courseMap = new Map(demoCourses.map((c) => [c.id, c]));
+      const enrichedSchedules = demoSchedules.map((s) => ({
+        ...s,
+        course: courseMap.get(s.course_id),
+      }));
+      setCourses(demoCourses);
+      setSchedules(enrichedSchedules);
+      setLoading(false);
+      return;
+    }
+
     if (!user || !isSupabaseConfigured) {
       setCourses([]);
       setSchedules([]);
@@ -147,16 +167,39 @@ export const SchedulePage = () => {
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, [user, isDemo]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
-  // Handle Save Course langsung ke Supabase
+  // Handle Save Course langsung ke Supabase atau LocalStore
   const handleSaveCourse = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!courseName.trim() || !user || !isSupabaseConfigured) return;
+    if (!courseName.trim()) return;
+
+    if (isDemo) {
+      LocalStore.saveCourse(
+        {
+          id: editingCourse?.id,
+          name: courseName.trim(),
+          code: courseCode.trim(),
+          lecturer: courseLecturer.trim(),
+          credits: courseCredits,
+          room: courseRoom.trim(),
+          color: courseColor,
+          semester_id: 'sem-5-demo',
+        },
+        'usr-demo-faisal'
+      );
+      setIsCourseModalOpen(false);
+      setEditingCourse(null);
+      await refreshSemesters();
+      await fetchData();
+      return;
+    }
+
+    if (!user || !isSupabaseConfigured) return;
 
     const semesterId = await ensureActiveSemesterId();
     const coursePayload = {
@@ -190,10 +233,31 @@ export const SchedulePage = () => {
     await fetchData();
   };
 
-  // Handle Save Schedule langsung ke Supabase
+  // Handle Save Schedule langsung ke Supabase atau LocalStore
   const handleSaveSchedule = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!scheduleCourseId || !user || !isSupabaseConfigured) return;
+    if (!scheduleCourseId) return;
+
+    if (isDemo) {
+      LocalStore.saveSchedule(
+        {
+          id: editingSchedule?.id,
+          course_id: scheduleCourseId,
+          day_of_week: scheduleDay,
+          start_time: scheduleStartTime,
+          end_time: scheduleEndTime,
+          room: scheduleRoom.trim(),
+          semester_id: 'sem-5-demo',
+        },
+        'usr-demo-faisal'
+      );
+      setIsScheduleModalOpen(false);
+      setEditingSchedule(null);
+      await fetchData();
+      return;
+    }
+
+    if (!user || !isSupabaseConfigured) return;
 
     const semesterId = await ensureActiveSemesterId();
     const schedulePayload = {
@@ -225,20 +289,81 @@ export const SchedulePage = () => {
     await fetchData();
   };
 
-  // Handle Delete Schedule langsung di Supabase
+  // Handle Delete Schedule langsung di Supabase atau LocalStore
   const handleDeleteSchedule = async (id: string) => {
-    if (window.confirm('Hapus jadwal kuliah ini?') && user && isSupabaseConfigured) {
-      try {
-        await supabase.from('schedules').delete().eq('id', id).eq('user_id', user.id);
-      } catch (err) {
-        console.error('Gagal menghapus schedule di Supabase:', err);
+    if (window.confirm('Hapus jadwal kuliah ini?')) {
+      if (isDemo) {
+        LocalStore.deleteSchedule(id, 'usr-demo-faisal');
+        await fetchData();
+        return;
       }
-      await fetchData();
+
+      if (user && isSupabaseConfigured) {
+        try {
+          await supabase.from('schedules').delete().eq('id', id).eq('user_id', user.id);
+        } catch (err) {
+          console.error('Gagal menghapus schedule di Supabase:', err);
+        }
+        await fetchData();
+      }
     }
   };
 
-  // Handle Import KRS / Excel Success langsung ke Supabase
+  // Handle Import KRS / Excel Success langsung ke Supabase atau LocalStore
   const handleImportSuccess = async (items: ParsedKrsItem[]) => {
+    if (isDemo) {
+      const colors = ['#7C9A76', '#5B8A5B', '#4D6449', '#3E503A', '#8FAF88', '#B2C5B0'];
+      const courseMap = new Map<string, string>();
+      courses.forEach((c) => {
+        courseMap.set(c.name.toLowerCase().trim(), c.id);
+      });
+      let colorIdx = courses.length;
+
+      for (const item of items) {
+        const key = item.courseName.toLowerCase().trim();
+        if (!courseMap.has(key)) {
+          const newCourse = LocalStore.saveCourse(
+            {
+              name: item.courseName.trim(),
+              code: (item.courseCode || '').trim(),
+              lecturer: (item.lecturer || '').trim(),
+              credits: item.credits || 3,
+              room: (item.room || '').trim(),
+              color: colors[colorIdx % colors.length],
+              semester_id: 'sem-5-demo',
+            },
+            'usr-demo-faisal'
+          );
+          courseMap.set(key, newCourse.id);
+          colorIdx++;
+        }
+      }
+
+      for (const item of items) {
+        const key = item.courseName.toLowerCase().trim();
+        const courseId = courseMap.get(key);
+        if (!courseId) continue;
+        LocalStore.saveSchedule(
+          {
+            course_id: courseId,
+            day_of_week: item.dayOfWeek,
+            start_time: item.startTime,
+            end_time: item.endTime,
+            room: (item.room || '').trim(),
+            semester_id: 'sem-5-demo',
+          },
+          'usr-demo-faisal'
+        );
+      }
+
+      if (items.length > 0) {
+        setSelectedDay(items[0].dayOfWeek);
+      }
+      await refreshSemesters();
+      await fetchData();
+      return;
+    }
+
     if (!user || !isSupabaseConfigured) return;
 
     // 1. Dapatkan Semester ID yang sah dari Supabase

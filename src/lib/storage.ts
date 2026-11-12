@@ -50,7 +50,7 @@ export const DEMO_PROFILE: Profile = {
 export const DEMO_SEMESTER: Semester = {
   id: 'sem-5-demo',
   user_id: DEMO_USER_ID,
-  name: 'Semester 5 (14 SKS)',
+  name: 'Semester 5 (19 SKS)',
   start_date: '2026-09-01',
   end_date: '2027-01-31',
   is_active: true,
@@ -59,14 +59,14 @@ export const DEMO_SEMESTER: Semester = {
 
 export const DEMO_COURSES: Course[] = [
   {
-    id: 'crs-demo-apsi',
+    id: 'crs-demo-webmob',
     user_id: DEMO_USER_ID,
     semester_id: 'sem-5-demo',
-    name: 'Analisis & Perancangan Sistem',
-    code: 'SI-APSI',
-    lecturer: 'Dr. Hendra Wijaya, M.Kom',
+    name: 'Pemrograman Web & Mobile',
+    code: 'TIF-301',
+    lecturer: 'Dr. Muhammad Ridwan, M.T.',
     credits: 3,
-    room: 'Ruang 401 - Gedung Fasilkom',
+    room: 'Lab Komputer 3 - Fasilkom',
     color: '#7C9A76',
     created_at: new Date().toISOString(),
   },
@@ -74,24 +74,12 @@ export const DEMO_COURSES: Course[] = [
     id: 'crs-demo-db',
     user_id: DEMO_USER_ID,
     semester_id: 'sem-5-demo',
-    name: 'Manajemen Basis Data',
-    code: 'SI-MBD',
-    lecturer: 'Ir. Siti Nurhaliza, M.T.',
+    name: 'Manajemen Basis Data Lanjut',
+    code: 'TIF-302',
+    lecturer: 'Prof. Ir. Siti Nurhaliza, M.Kom.',
     credits: 3,
     room: 'Lab Basis Data - Fasilkom',
     color: '#5B8A5B',
-    created_at: new Date().toISOString(),
-  },
-  {
-    id: 'crs-demo-web',
-    user_id: DEMO_USER_ID,
-    semester_id: 'sem-5-demo',
-    name: 'Pemrograman Web Lanjut',
-    code: 'SI-PWL',
-    lecturer: 'Budi Raharjo, S.Kom., M.Cs.',
-    credits: 3,
-    room: 'Lab Software 2',
-    color: '#4D6449',
     created_at: new Date().toISOString(),
   },
   {
@@ -99,107 +87,212 @@ export const DEMO_COURSES: Course[] = [
     user_id: DEMO_USER_ID,
     semester_id: 'sem-5-demo',
     name: 'Rekayasa Perangkat Lunak',
-    code: 'SI-RPL',
-    lecturer: 'Dewi Lestari, M.Kom.',
+    code: 'TIF-303',
+    lecturer: 'Dr. Hendra Wijaya, M.Kom.',
     credits: 3,
     room: 'Ruang 402 - Gedung Fasilkom',
-    color: '#3E503A',
+    color: '#4D6449',
     created_at: new Date().toISOString(),
   },
   {
     id: 'crs-demo-sec',
     user_id: DEMO_USER_ID,
     semester_id: 'sem-5-demo',
-    name: 'Keamanan Sistem Informasi',
-    code: 'SI-SEC',
+    name: 'Keamanan Jaringan & Sistem Informasi',
+    code: 'TIF-304',
     lecturer: 'Ahmad Fauzi, M.T.',
-    credits: 2,
+    credits: 3,
+    room: 'Lab Jaringan Komputer',
+    color: '#3E503A',
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 'crs-demo-ai',
+    user_id: DEMO_USER_ID,
+    semester_id: 'sem-5-demo',
+    name: 'Kecerdasan Buatan & Machine Learning',
+    code: 'TIF-305',
+    lecturer: 'Dr. Eng. Dian Pratama, M.Eng.',
+    credits: 3,
     room: 'Ruang 305 - Gedung Fasilkom',
     color: '#8FAF88',
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 'crs-demo-uiux',
+    user_id: DEMO_USER_ID,
+    semester_id: 'sem-5-demo',
+    name: 'Desain Antarmuka & Pengalaman Pengguna (UI/UX)',
+    code: 'TIF-306',
+    lecturer: 'Rina Oktavia, S.Sn., M.Ds.',
+    credits: 2,
+    room: 'Studio Multimedia - Fasilkom',
+    color: '#93AC91',
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 'crs-demo-etika',
+    user_id: DEMO_USER_ID,
+    semester_id: 'sem-5-demo',
+    name: 'Etika Profesi & Komunikasi Bisnis',
+    code: 'UNI-201',
+    lecturer: 'Dr. H. Syarif Hidayat, M.M.',
+    credits: 2,
+    room: 'Ruang 101 - Gedung Kuliah Bersama',
+    color: '#627F5C',
     created_at: new Date().toISOString(),
   },
 ];
 
 export const DEMO_SCHEDULES: Schedule[] = [
+  // SENIN (Day 1)
   {
-    id: 'sch-demo-1',
+    id: 'sch-demo-mon-1',
     user_id: DEMO_USER_ID,
     semester_id: 'sem-5-demo',
-    course_id: 'crs-demo-apsi',
+    course_id: 'crs-demo-webmob',
     day_of_week: 1, // Senin
     start_time: '08:00',
     end_time: '10:30',
-    room: 'Ruang 401 - Gedung Fasilkom',
-    notes: 'Teori - Pemodelan Proses Bisnis & UML',
+    room: 'Lab Komputer 3 - Fasilkom',
+    notes: 'Teori Arsitektur PWA & State Management Modern',
     is_cancelled: false,
     created_at: new Date().toISOString(),
   },
   {
-    id: 'sch-demo-2',
+    id: 'sch-demo-mon-2',
+    user_id: DEMO_USER_ID,
+    semester_id: 'sem-5-demo',
+    course_id: 'crs-demo-uiux',
+    day_of_week: 1, // Senin
+    start_time: '13:00',
+    end_time: '15:30',
+    room: 'Studio Multimedia - Fasilkom',
+    notes: 'Praktik Heuristic Evaluation & Prototyping Figma',
+    is_cancelled: false,
+    created_at: new Date().toISOString(),
+  },
+
+  // SELASA (Day 2)
+  {
+    id: 'sch-demo-tue-1',
     user_id: DEMO_USER_ID,
     semester_id: 'sem-5-demo',
     course_id: 'crs-demo-db',
     day_of_week: 2, // Selasa
-    start_time: '10:00',
-    end_time: '12:30',
+    start_time: '08:30',
+    end_time: '11:00',
     room: 'Lab Basis Data - Fasilkom',
-    notes: 'Praktikum Normalisasi & Indexing PostgreSQL',
+    notes: 'Praktikum Normalisasi 3NF, BCNF & Optimasi Query PostgreSQL',
     is_cancelled: false,
     created_at: new Date().toISOString(),
   },
   {
-    id: 'sch-demo-3',
+    id: 'sch-demo-tue-2',
     user_id: DEMO_USER_ID,
     semester_id: 'sem-5-demo',
-    course_id: 'crs-demo-web',
-    day_of_week: 3, // Rabu
-    start_time: '13:00',
-    end_time: '15:30',
-    room: 'Lab Software 2',
-    notes: 'Praktikum Fullstack React & Node.js',
+    course_id: 'crs-demo-etika',
+    day_of_week: 2, // Selasa
+    start_time: '13:30',
+    end_time: '15:10',
+    room: 'Ruang 101 - Gedung Kuliah Bersama',
+    notes: 'Diskusi Studi Kasus Regulasi Privasi Data & Etika AI',
     is_cancelled: false,
     created_at: new Date().toISOString(),
   },
+
+  // RABU (Day 3)
   {
-    id: 'sch-demo-4',
+    id: 'sch-demo-wed-1',
     user_id: DEMO_USER_ID,
     semester_id: 'sem-5-demo',
     course_id: 'crs-demo-rpl',
+    day_of_week: 3, // Rabu
+    start_time: '09:00',
+    end_time: '11:30',
+    room: 'Ruang 402 - Gedung Fasilkom',
+    notes: 'Metodologi Agile Scrum, Sprint Backlog & Pemodelan UML',
+    is_cancelled: false,
+    created_at: new Date().toISOString(),
+  },
+
+  // KAMIS (Day 4)
+  {
+    id: 'sch-demo-thu-1',
+    user_id: DEMO_USER_ID,
+    semester_id: 'sem-5-demo',
+    course_id: 'crs-demo-sec',
     day_of_week: 4, // Kamis
     start_time: '08:00',
     end_time: '10:30',
-    room: 'Ruang 402 - Gedung Fasilkom',
-    notes: 'Teori - Agile Scrum Framework & Sprint Planning',
+    room: 'Lab Jaringan Komputer',
+    notes: 'Analisis Vulnerability Web, Konfigurasi Firewall & OWASP Top 10',
     is_cancelled: false,
     created_at: new Date().toISOString(),
   },
   {
-    id: 'sch-demo-5',
+    id: 'sch-demo-thu-2',
     user_id: DEMO_USER_ID,
     semester_id: 'sem-5-demo',
-    course_id: 'crs-demo-sec',
-    day_of_week: 5, // Jumat
-    start_time: '09:00',
-    end_time: '10:40',
+    course_id: 'crs-demo-ai',
+    day_of_week: 4, // Kamis
+    start_time: '13:00',
+    end_time: '15:30',
     room: 'Ruang 305 - Gedung Fasilkom',
-    notes: 'Analisis Vulnerability Web & OWASP Top 10',
+    notes: 'Supervised Learning & Implementasi Algoritma Klasifikasi Python',
     is_cancelled: false,
     created_at: new Date().toISOString(),
   },
+
+  // JUMAT (Day 5)
+  {
+    id: 'sch-demo-fri-1',
+    user_id: DEMO_USER_ID,
+    semester_id: 'sem-5-demo',
+    course_id: 'crs-demo-webmob',
+    day_of_week: 5, // Jumat
+    start_time: '08:00',
+    end_time: '10:30',
+    room: 'Lab Komputer 3 - Fasilkom',
+    notes: 'Hands-on Lab: Integrasi Cloud Supabase & Local Database Cache',
+    is_cancelled: false,
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 'sch-demo-fri-2',
+    user_id: DEMO_USER_ID,
+    semester_id: 'sem-5-demo',
+    course_id: 'crs-demo-db',
+    day_of_week: 5, // Jumat
+    start_time: '13:30',
+    end_time: '15:30',
+    room: 'Lab Basis Data - Fasilkom',
+    notes: 'Tutorial Asistensi Lab: Pembuatan Prosedur Tersimpan & Triggers',
+    is_cancelled: false,
+    created_at: new Date().toISOString(),
+  },
+  // HARI SABTU (Day 6) & MINGGU (Day 0): JADWAL KOSONG (Hari Libur / Mandiri)
 ];
+
+const createDemoDeadline = (daysFromNow: number, hours = 23, minutes = 59): string => {
+  const d = new Date();
+  d.setDate(d.getDate() + daysFromNow);
+  d.setHours(hours, minutes, 0, 0);
+  return d.toISOString();
+};
 
 export const DEMO_TASKS: Task[] = [
   {
     id: 'tsk-demo-1',
     user_id: DEMO_USER_ID,
     semester_id: 'sem-5-demo',
-    course_id: 'crs-demo-apsi',
-    title: 'Analisis Dokumen Kebutuhan (SRS) E-Commerce',
-    description: 'Menyusun use case diagram, activity diagram, dan matriks keterlacakan kebutuhan.',
-    deadline: '2026-11-20T17:00:00.000Z',
+    course_id: 'crs-demo-webmob',
+    title: 'Implementasi PWA & Offline Sync Service Worker',
+    description: 'Menyelesaikan modul sinkronisasi offline IndexedDB dan push notifications pada aplikasi mobile.',
+    deadline: createDemoDeadline(0, 23, 59), // Hari Ini pukul 23:59 WIB!
     priority: 'high',
     status: 'in_progress',
-    notes: 'Bahas poin 3.2 tentang arsitektur pembayaran bersama tim kelompok.',
+    notes: 'Pastikan service worker terdaftar dengan benar di production build.',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   },
@@ -208,12 +301,12 @@ export const DEMO_TASKS: Task[] = [
     user_id: DEMO_USER_ID,
     semester_id: 'sem-5-demo',
     course_id: 'crs-demo-db',
-    title: 'Perancangan ERD & Skema Database Perpustakaan Digital',
-    description: 'Normalisasi hingga 3NF dan export SQL migration DDL.',
-    deadline: new Date(Date.now() + 6 * 3600 * 1000).toISOString(),
+    title: 'Normalisasi 3NF & Skema Database Perpustakaan Kampus',
+    description: 'Menyusun dokumen dekomposisi tabel bebas anomali hingga 3NF beserta script DDL SQL.',
+    deadline: createDemoDeadline(1, 23, 59), // Besok pukul 23:59 WIB!
     priority: 'high',
     status: 'todo',
-    notes: 'Pastikan index pada foreign key id_anggota sudah terpasang.',
+    notes: 'Konsultasikan relasi many-to-many peminjaman buku dengan dosen pembimbing.',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   },
@@ -221,13 +314,69 @@ export const DEMO_TASKS: Task[] = [
     id: 'tsk-demo-3',
     user_id: DEMO_USER_ID,
     semester_id: 'sem-5-demo',
-    course_id: 'crs-demo-web',
-    title: 'Implementasi Autentikasi JWT & Role-Based Access di Express API',
-    description: 'Buat middleware verifyToken dan role check admin/mahasiswa.',
-    deadline: '2026-11-25T23:59:00.000Z',
+    course_id: 'crs-demo-rpl',
+    title: 'Penyusunan Software Requirement Specification (SRS) Bab 2-3',
+    description: 'Melengkapi use case diagram, activity diagram, dan data flow diagram sistem e-learning.',
+    deadline: createDemoDeadline(3, 23, 59), // 3 hari lagi
+    priority: 'normal',
+    status: 'in_progress',
+    notes: 'Bahas pembagian peran anggota tim kelompok di group planner.',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+  {
+    id: 'tsk-demo-4',
+    user_id: DEMO_USER_ID,
+    semester_id: 'sem-5-demo',
+    course_id: 'crs-demo-sec',
+    title: 'Laporan Praktikum Firewall & Port Scanning dengan Nmap',
+    description: 'Melakukan penetration testing pada server simulasi dan membuat tabel mitigasi kerentanan.',
+    deadline: createDemoDeadline(5, 23, 59), // 5 hari lagi
     priority: 'normal',
     status: 'todo',
-    notes: 'Gunakan HTTP-only cookies untuk menyimpan refresh token.',
+    notes: 'Screenshot terminal hasil scanning dan cantumkan analisis port terbuka.',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+  {
+    id: 'tsk-demo-5',
+    user_id: DEMO_USER_ID,
+    semester_id: 'sem-5-demo',
+    course_id: 'crs-demo-uiux',
+    title: 'Design System & Prototipe Interaktif Aplikasi Mahasiswa di Figma',
+    description: 'Menyusun wireframe, color palette, typography token, dan interactive prototype 15 screen.',
+    deadline: createDemoDeadline(7, 23, 59), // Pekan depan
+    priority: 'normal',
+    status: 'todo',
+    notes: 'Gunakan prinsip design system dan pastikan accessibility kontras warna terpenuhi.',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+  {
+    id: 'tsk-demo-6',
+    user_id: DEMO_USER_ID,
+    semester_id: 'sem-5-demo',
+    course_id: 'crs-demo-ai',
+    title: 'Eksplorasi Model Klasifikasi Gambar dengan CNN di Python',
+    description: 'Training model convolutional neural network dengan dataset citra dan evaluasi akurasi F1-score.',
+    deadline: createDemoDeadline(10, 18, 0), // 10 hari lagi
+    priority: 'normal',
+    status: 'todo',
+    notes: 'Jalankan training pada Google Colab dengan GPU runtime.',
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+  {
+    id: 'tsk-demo-7',
+    user_id: DEMO_USER_ID,
+    semester_id: 'sem-5-demo',
+    course_id: 'crs-demo-etika',
+    title: 'Resume Jurnal Ilmiah: Etika Kecerdasan Buatan & Privasi Data',
+    description: 'Membuat resume 3 halaman dari jurnal IEEE mengenai perlindungan data pribadi dan etika AI.',
+    deadline: createDemoDeadline(-2, 18, 0), // Selesai 2 hari lalu
+    priority: 'low',
+    status: 'done',
+    notes: 'Tugas sudah dikumpulkan melalui portal akademik e-learning.',
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   },
@@ -513,7 +662,7 @@ export function initLocalStorage(): void {
   }
 
   // 4. Inisialisasi container khusus demo Faisal
-  if (!localStorage.getItem('siacad_demo_initialized_v8')) {
+  if (!localStorage.getItem('siacad_demo_initialized_v10')) {
     setItem('siacad_demo_profile', DEMO_PROFILE);
     setItem('siacad_demo_semesters', [DEMO_SEMESTER]);
     setItem('siacad_demo_courses', DEMO_COURSES);
@@ -522,7 +671,7 @@ export function initLocalStorage(): void {
     setItem('siacad_demo_groups', DEMO_GROUPS);
     setItem('siacad_demo_preferences', DEMO_PREFERENCES);
     setItem('siacad_demo_notifications', DEMO_NOTIFICATIONS);
-    localStorage.setItem('siacad_demo_initialized_v8', 'true');
+    localStorage.setItem('siacad_demo_initialized_v10', 'true');
   }
 }
 
@@ -912,7 +1061,7 @@ export const LocalStore = {
     return getItem(`siacad_user_${uid}_tasks`, []);
   },
 
-  saveTask: (taskData: Partial<Task> & { title: string }, userId?: string): Task => {
+  saveTask: (taskData: Partial<Task> & { title?: string }, userId?: string): Task => {
     const isDemo = isStrictDemoUser(userId);
     const user = LocalStore.getUser();
     const uid = isDemo ? DEMO_USER_ID : (userId || user?.id || `usr-${Date.now()}`);
@@ -933,7 +1082,7 @@ export const LocalStore = {
       user_id: uid,
       semester_id: taskData.semester_id || null,
       course_id: taskData.course_id || null,
-      title: taskData.title,
+      title: taskData.title || 'Tugas Baru',
       description: taskData.description || '',
       deadline: taskData.deadline || null,
       priority: taskData.priority || 'normal',

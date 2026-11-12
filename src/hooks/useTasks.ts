@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Task, Course } from '../types/database';
 import { supabase, isSupabaseConfigured } from '../config/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import { LocalStore } from '../lib/storage';
 
 export interface TaskFiltersState {
   courseId: string;
@@ -12,14 +13,20 @@ export interface TaskFiltersState {
 }
 
 export const useTasks = () => {
-  const { user } = useAuth();
+  const { user, isDemo } = useAuth();
 
   const [tasks, setTasks] = useState<Task[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Ambil daftar mata kuliah langsung dari Supabase
+  // Ambil daftar mata kuliah langsung dari Supabase atau LocalStore
   const fetchCourses = useCallback(async () => {
+    if (isDemo) {
+      const demoCourses = LocalStore.getCourses('usr-demo-faisal');
+      setCourses(demoCourses);
+      return;
+    }
+
     if (!user || !isSupabaseConfigured) {
       setCourses([]);
       return;
@@ -38,10 +45,24 @@ export const useTasks = () => {
     } catch (err) {
       console.error('Error fetching courses from Supabase:', err);
     }
-  }, [user]);
+  }, [user, isDemo]);
 
-  // Ambil daftar tugas langsung dari Supabase
+  // Ambil daftar tugas langsung dari Supabase atau LocalStore
   const fetchTasks = useCallback(async () => {
+    if (isDemo) {
+      setLoading(true);
+      const demoTasks = LocalStore.getTasks('usr-demo-faisal');
+      const demoCourses = LocalStore.getCourses('usr-demo-faisal');
+      const courseMap = new Map(demoCourses.map((c) => [c.id, c]));
+      const enriched = demoTasks.map((t) => ({
+        ...t,
+        course: t.course_id ? courseMap.get(t.course_id) : undefined,
+      }));
+      setTasks(enriched);
+      setLoading(false);
+      return;
+    }
+
     if (!user || !isSupabaseConfigured) {
       setTasks([]);
       setLoading(false);
@@ -66,14 +87,14 @@ export const useTasks = () => {
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, [user, isDemo]);
 
   useEffect(() => {
     fetchTasks();
     fetchCourses();
 
-    // Supabase Real-Time Listener
-    if (user && isSupabaseConfigured) {
+    // Supabase Real-Time Listener (Hanya untuk pengguna non-demo dengan Supabase aktif)
+    if (user && isSupabaseConfigured && !isDemo) {
       const channel = supabase
         .channel(`tasks-realtime-${user.id}`)
         .on(
@@ -89,10 +110,16 @@ export const useTasks = () => {
         supabase.removeChannel(channel);
       };
     }
-  }, [fetchTasks, fetchCourses, user]);
+  }, [fetchTasks, fetchCourses, user, isDemo]);
 
-  // Tambah tugas baru ke Supabase
+  // Tambah tugas baru
   const createTask = async (taskData: Omit<Task, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => {
+    if (isDemo) {
+      const created = LocalStore.saveTask(taskData, 'usr-demo-faisal');
+      await fetchTasks();
+      return { data: created, error: null };
+    }
+
     if (!user || !isSupabaseConfigured) {
       return { data: null, error: new Error('User belum login ke Supabase.') };
     }
@@ -120,8 +147,14 @@ export const useTasks = () => {
     }
   };
 
-  // Update tugas di Supabase
+  // Update tugas
   const updateTask = async (id: string, updates: Partial<Task>) => {
+    if (isDemo) {
+      const updated = LocalStore.saveTask({ ...updates, id }, 'usr-demo-faisal');
+      await fetchTasks();
+      return { data: updated, error: null };
+    }
+
     if (!user || !isSupabaseConfigured) {
       return { data: null, error: new Error('User belum login ke Supabase.') };
     }
@@ -146,8 +179,14 @@ export const useTasks = () => {
     }
   };
 
-  // Hapus tugas dari Supabase
+  // Hapus tugas
   const deleteTask = async (id: string) => {
+    if (isDemo) {
+      LocalStore.deleteTask(id, 'usr-demo-faisal');
+      await fetchTasks();
+      return { error: null };
+    }
+
     if (!user || !isSupabaseConfigured) {
       return { error: new Error('User belum login ke Supabase.') };
     }
@@ -171,6 +210,11 @@ export const useTasks = () => {
   };
 
   const toggleTaskStatus = async (task: Task) => {
+    if (isDemo) {
+      LocalStore.toggleTask(task.id, 'usr-demo-faisal');
+      await fetchTasks();
+      return { data: null, error: null };
+    }
     const nextStatus = task.status === 'done' ? 'todo' : 'done';
     return updateTask(task.id, { status: nextStatus });
   };

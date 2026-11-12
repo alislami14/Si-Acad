@@ -3,6 +3,7 @@ import { User, Session } from '@supabase/supabase-js';
 import { supabase, isSupabaseConfigured } from '../config/supabase';
 import { Profile } from '../types/database';
 import { queryClient } from '../lib/queryClient';
+import { DEMO_PROFILE, LocalStore } from '../lib/storage';
 
 export interface SignUpResult {
   error: Error | null;
@@ -68,8 +69,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const isDemo = Boolean(user?.user_metadata?.username === 'faisal');
 
-  // Ambil profil langsung dari tabel profiles Supabase
+  // Ambil profil langsung dari tabel profiles Supabase (atau LocalStore untuk demo)
   const loadProfile = async (u: { id: string; user_metadata?: any; email?: string }) => {
+    if (u.id === 'usr-demo-faisal' || u.user_metadata?.username === 'faisal') {
+      const demoProfile = LocalStore.getProfile('usr-demo-faisal') || DEMO_PROFILE;
+      setProfile(demoProfile);
+      return;
+    }
+
     if (!isSupabaseConfigured) return;
     try {
       const { data, error } = await supabase
@@ -482,10 +489,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   /**
-   * Perbarui Profil Mahasiswa di Supabase
+   * Perbarui Profil Mahasiswa di Supabase (atau LocalStore jika demo)
    */
   const updateProfile = async (updates: Partial<Profile>) => {
-    if (!user || !isSupabaseConfigured) return;
+    if (!user) return;
+
+    if (isDemo) {
+      LocalStore.updateProfile(updates, 'usr-demo-faisal');
+      setProfile((prev) => (prev ? { ...prev, ...updates } : null));
+      return;
+    }
+
+    if (!isSupabaseConfigured) return;
     try {
       const { error } = await supabase
         .from('profiles')

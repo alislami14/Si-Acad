@@ -7,15 +7,28 @@ import {
 import { isWithinInterval, parseISO, startOfDay, endOfDay } from 'date-fns';
 import { supabase, isSupabaseConfigured } from '../config/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import { LocalStore } from '../lib/storage';
 
 export const useRotation = (groupId: string) => {
-  const { user } = useAuth();
+  const { user, isDemo } = useAuth();
   const [slots, setSlots] = useState<GroupRotationSlot[]>([]);
   const [events, setEvents] = useState<GroupEvent[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchRotationData = useCallback(async () => {
+    if (isDemo) {
+      setLoading(true);
+      const s = LocalStore.getRotationSlots(groupId);
+      const e = LocalStore.getGroupEvents(groupId);
+      const c = LocalStore.getCourses('usr-demo-faisal');
+      setSlots(s);
+      setEvents(e);
+      setCourses(c);
+      setLoading(false);
+      return;
+    }
+
     if (!groupId || !isSupabaseConfigured) {
       setSlots([]);
       setEvents([]);
@@ -56,7 +69,7 @@ export const useRotation = (groupId: string) => {
     fetchRotationData();
   }, [fetchRotationData]);
 
-  // Generate automatic rotation slots directly in Supabase
+  // Generate automatic rotation slots directly in Supabase or LocalStore
   const generateAutoRotation = async ({
     startDate,
     totalSlots,
@@ -68,6 +81,18 @@ export const useRotation = (groupId: string) => {
     intervalDays?: number;
     notes?: string;
   }) => {
+    if (isDemo) {
+      const generated = LocalStore.generateAutoRotation({
+        groupId,
+        startDate,
+        totalSlots,
+        intervalDays,
+        notes,
+      });
+      setSlots(generated);
+      return { data: generated, error: null };
+    }
+
     if (!groupId || !isSupabaseConfigured) return { data: [], error: null };
 
     try {
@@ -111,6 +136,12 @@ export const useRotation = (groupId: string) => {
 
   // Add or update rotation slot
   const saveSlot = async (slot: Partial<GroupRotationSlot>) => {
+    if (isDemo) {
+      const saved = LocalStore.saveRotationSlot({ ...slot, group_id: groupId });
+      fetchRotationData();
+      return { data: saved, error: null };
+    }
+
     if (!groupId || !isSupabaseConfigured) return { data: null, error: null };
 
     try {
@@ -140,6 +171,12 @@ export const useRotation = (groupId: string) => {
 
   // Delete slot
   const deleteSlot = async (slotId: string) => {
+    if (isDemo) {
+      LocalStore.deleteRotationSlot(slotId, groupId);
+      fetchRotationData();
+      return { error: null };
+    }
+
     if (!isSupabaseConfigured) return { error: null };
     try {
       await supabase.from('group_rotation_slots').delete().eq('id', slotId);
@@ -153,6 +190,12 @@ export const useRotation = (groupId: string) => {
 
   // Create or update group event
   const saveEvent = async (eventData: Partial<GroupEvent>) => {
+    if (isDemo) {
+      const saved = LocalStore.saveGroupEvent({ ...eventData, group_id: groupId });
+      fetchRotationData();
+      return { data: saved, error: null };
+    }
+
     if (!groupId || !isSupabaseConfigured) return { data: null, error: null };
 
     try {
@@ -182,6 +225,12 @@ export const useRotation = (groupId: string) => {
 
   // Delete event
   const deleteEvent = async (eventId: string) => {
+    if (isDemo) {
+      LocalStore.deleteGroupEvent(eventId);
+      fetchRotationData();
+      return { error: null };
+    }
+
     if (!isSupabaseConfigured) return { error: null };
     try {
       await supabase.from('group_events').delete().eq('id', eventId);

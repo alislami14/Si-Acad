@@ -24,6 +24,7 @@ import PageGuide from '../components/ui/PageGuide';
 import { formatDate, formatDateTime, isToday, isPast, parseISO } from '../lib/dateUtils';
 import { Schedule } from '../types/database';
 import { supabase, isSupabaseConfigured } from '../config/supabase';
+import { LocalStore } from '../lib/storage';
 
 export const DashboardPage = () => {
   const { user, profile, isDemo } = useAuth();
@@ -35,11 +36,27 @@ export const DashboardPage = () => {
   const [todaySchedules, setTodaySchedules] = useState<Schedule[]>([]);
   const [schedulesLoading, setSchedulesLoading] = useState(true);
 
-  // Fetch today's class schedule directly from Supabase
+  // Fetch today's class schedule directly from Supabase or LocalStore for demo
   useEffect(() => {
     setSchedulesLoading(true);
     const fetchDashboardSchedules = async () => {
       try {
+        if (isDemo) {
+          const currentDayOfWeek = new Date().getDay(); // 0 is Sunday, 1 is Monday...
+          const allSchedules = LocalStore.getSchedules('usr-demo-faisal');
+          const allCourses = LocalStore.getCourses('usr-demo-faisal');
+          const courseMap = new Map(allCourses.map((c) => [c.id, c]));
+          const filtered = allSchedules
+            .filter((s) => s.day_of_week === currentDayOfWeek && !s.is_cancelled)
+            .map((s) => ({
+              ...s,
+              course: courseMap.get(s.course_id),
+            }))
+            .sort((a, b) => a.start_time.localeCompare(b.start_time));
+          setTodaySchedules(filtered);
+          return;
+        }
+
         if (!user || !isSupabaseConfigured) {
           setTodaySchedules([]);
           return;
@@ -69,7 +86,7 @@ export const DashboardPage = () => {
     };
 
     fetchDashboardSchedules();
-  }, [user, activeSemester]);
+  }, [user, activeSemester, isDemo]);
 
   // Tasks statistics
   const pendingTasks = tasks.filter((t) => t.status !== 'done');
@@ -86,7 +103,7 @@ export const DashboardPage = () => {
             <GraduationCap className="w-3.5 h-3.5 text-white/90" />
             <span>
               {activeSemester?.name ||
-                (isDemo ? 'Semester 5 (14 SKS)' : 'Belum Ada Semester Aktif')}
+                (isDemo ? 'Semester 5 (19 SKS)' : 'Belum Ada Semester Aktif')}
             </span>
           </div>
 

@@ -116,11 +116,11 @@ export const DateTimePicker = ({
 
     const rect = triggerRef.current.getBoundingClientRect();
     const popoverWidth = 310;
-    const popoverHeight = 350;
+    const popoverHeight = showTime ? 420 : 330;
 
     const spaceBelow = window.innerHeight - rect.bottom;
     const spaceAbove = rect.top;
-    const placeAbove = spaceBelow < popoverHeight && spaceAbove > spaceBelow;
+    let placeAbove = spaceBelow < popoverHeight && spaceAbove > spaceBelow;
 
     // Constrain left position so it doesn't overflow the viewport
     let left = rect.left;
@@ -128,14 +128,25 @@ export const DateTimePicker = ({
       left = Math.max(16, window.innerWidth - popoverWidth - 16);
     }
 
-    const top = placeAbove ? rect.top - 8 : rect.bottom + 8;
+    let top = placeAbove ? rect.top - 8 : rect.bottom + 8;
+    // Safety check: ensure popover stays within viewport boundaries
+    if (!placeAbove && top + popoverHeight > window.innerHeight - 12) {
+      if (spaceAbove >= popoverHeight) {
+        placeAbove = true;
+        top = rect.top - 8;
+      } else {
+        top = Math.max(12, window.innerHeight - popoverHeight - 12);
+      }
+    } else if (placeAbove && top - popoverHeight < 12) {
+      top = Math.min(window.innerHeight - 12, popoverHeight + 12);
+    }
 
     setPopoverPosition({
       top,
       left,
       placeAbove,
     });
-  }, []);
+  }, [showTime]);
 
   // Update position when opened, resized, or scrolled
   useEffect(() => {
@@ -250,7 +261,7 @@ export const DateTimePicker = ({
         ${
           isMobile
             ? 'w-full max-w-sm rounded-t-3xl sm:rounded-3xl p-3.5 pb-6 space-y-2.5 max-h-[85vh] overflow-y-auto no-scrollbar'
-            : 'w-[305px] rounded-2xl p-3 space-y-2.5'
+            : 'w-[305px] rounded-2xl p-3 space-y-2.5 max-h-[calc(100vh-24px)] overflow-y-auto no-scrollbar'
         }`}
     >
       {/* Mobile drag handle indicator */}

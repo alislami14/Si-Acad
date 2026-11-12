@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect, useCallback, ReactNode 
 import { Semester } from '../types/database';
 import { supabase, isSupabaseConfigured } from '../config/supabase';
 import { useAuth } from './AuthContext';
+import { DEMO_SEMESTER, LocalStore } from '../lib/storage';
 
 interface SemesterContextType {
   semesters: Semester[];
@@ -23,13 +24,24 @@ export const useSemester = () => {
 };
 
 export function SemesterProvider({ children }: { children: ReactNode }) {
-  const { user } = useAuth();
+  const { user, isDemo } = useAuth();
   const [semesters, setSemesters] = useState<Semester[]>([]);
   const [activeSemester, setActiveSemesterState] = useState<Semester | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Ambil semester langsung dari Supabase
+  // Ambil semester langsung dari Supabase atau LocalStore untuk demo
   const fetchSemesters = useCallback(async () => {
+    if (isDemo) {
+      setLoading(true);
+      const demoSems = LocalStore.getSemesters('usr-demo-faisal');
+      const list = demoSems.length > 0 ? demoSems : [DEMO_SEMESTER];
+      setSemesters(list);
+      const active = list.find((s) => s.is_active) || list[0];
+      setActiveSemesterState(active);
+      setLoading(false);
+      return;
+    }
+
     if (!user || !isSupabaseConfigured) {
       setSemesters([]);
       setActiveSemesterState(null);
@@ -83,6 +95,11 @@ export function SemesterProvider({ children }: { children: ReactNode }) {
 
   const setActiveSemester = async (semester: Semester) => {
     setActiveSemesterState(semester);
+    if (isDemo) {
+      LocalStore.setActiveSemester(semester.id, 'usr-demo-faisal');
+      await fetchSemesters();
+      return;
+    }
     if (!user || !isSupabaseConfigured) return;
 
     try {
@@ -95,6 +112,11 @@ export function SemesterProvider({ children }: { children: ReactNode }) {
   };
 
   const createSemester = async (name: string, startDate?: string, endDate?: string) => {
+    if (isDemo) {
+      const newSem = LocalStore.createSemester(name, startDate, endDate, 'usr-demo-faisal');
+      await fetchSemesters();
+      return newSem;
+    }
     if (!user || !isSupabaseConfigured) return null;
 
     try {
@@ -126,6 +148,13 @@ export function SemesterProvider({ children }: { children: ReactNode }) {
   };
 
   const updateSemester = async (id: string, updates: Partial<Semester>) => {
+    if (isDemo) {
+      const list = LocalStore.getSemesters('usr-demo-faisal');
+      const updated = list.map((s) => (s.id === id ? { ...s, ...updates } : s));
+      localStorage.setItem('siacad_demo_semesters', JSON.stringify(updated));
+      await fetchSemesters();
+      return;
+    }
     if (!user || !isSupabaseConfigured) return;
 
     try {
@@ -137,6 +166,12 @@ export function SemesterProvider({ children }: { children: ReactNode }) {
   };
 
   const deleteSemester = async (id: string) => {
+    if (isDemo) {
+      const list = LocalStore.getSemesters('usr-demo-faisal').filter((s) => s.id !== id);
+      localStorage.setItem('siacad_demo_semesters', JSON.stringify(list));
+      await fetchSemesters();
+      return;
+    }
     if (!user || !isSupabaseConfigured) return;
 
     try {

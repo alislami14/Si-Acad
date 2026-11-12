@@ -2,14 +2,23 @@ import { useState, useEffect, useCallback } from 'react';
 import { StudyGroup } from '../types/database';
 import { supabase, isSupabaseConfigured } from '../config/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import { LocalStore } from '../lib/storage';
 
 export const useGroups = () => {
-  const { user } = useAuth();
+  const { user, isDemo } = useAuth();
   const [groups, setGroups] = useState<StudyGroup[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Ambil daftar kelompok langsung dari Supabase
+  // Ambil daftar kelompok langsung dari Supabase atau LocalStore untuk demo
   const fetchGroups = useCallback(async () => {
+    if (isDemo) {
+      setLoading(true);
+      const demoGroups = LocalStore.getGroups('usr-demo-faisal');
+      setGroups(demoGroups);
+      setLoading(false);
+      return;
+    }
+
     if (!user || !isSupabaseConfigured) {
       setGroups([]);
       setLoading(false);
@@ -36,14 +45,20 @@ export const useGroups = () => {
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, [user, isDemo]);
 
   useEffect(() => {
     fetchGroups();
   }, [fetchGroups]);
 
-  // Buat kelompok baru langsung di Supabase
+  // Buat kelompok baru langsung di Supabase atau LocalStore
   const createGroup = async (name: string, description: string) => {
+    if (isDemo) {
+      const newGroup = LocalStore.createGroup(name, description, 'usr-demo-faisal');
+      await fetchGroups();
+      return { data: newGroup, error: null };
+    }
+
     if (!user || !isSupabaseConfigured) {
       return { data: null, error: new Error('User belum login.') };
     }
@@ -82,9 +97,19 @@ export const useGroups = () => {
     }
   };
 
-  // Gabung kelompok via kode undangan langsung di Supabase
+  // Gabung kelompok via kode undangan langsung di Supabase atau LocalStore
   const joinGroupByCode = async (inviteCode: string) => {
     const cleanCode = inviteCode.trim().toUpperCase();
+
+    if (isDemo) {
+      const res = LocalStore.joinGroup(cleanCode, 'usr-demo-faisal');
+      if (res.success && res.group) {
+        await fetchGroups();
+        return { data: res.group, error: null };
+      }
+      return { data: null, error: { message: res.error || 'Gagal bergabung ke kelompok.' } };
+    }
+
     if (!user || !isSupabaseConfigured) {
       return { data: null, error: { message: 'User belum login.' } };
     }
@@ -123,8 +148,14 @@ export const useGroups = () => {
     }
   };
 
-  // Regenerasi kode undangan kelompok di Supabase
+  // Regenerasi kode undangan kelompok di Supabase atau LocalStore
   const regenerateCode = async (groupId: string): Promise<{ data?: string | null; error?: unknown }> => {
+    if (isDemo) {
+      const newCode = LocalStore.regenerateInviteCode(groupId, 'usr-demo-faisal');
+      await fetchGroups();
+      return { data: newCode, error: null };
+    }
+
     const newCode = Math.random().toString(36).substring(2, 8).toUpperCase();
     if (!user || !isSupabaseConfigured) return { data: newCode, error: null };
 
@@ -143,8 +174,14 @@ export const useGroups = () => {
     }
   };
 
-  // Keluar dari kelompok di Supabase
+  // Keluar dari kelompok
   const leaveGroup = async (groupId: string) => {
+    if (isDemo) {
+      LocalStore.leaveGroup(groupId, 'usr-demo-faisal');
+      await fetchGroups();
+      return;
+    }
+
     if (!user || !isSupabaseConfigured) return;
 
     try {
@@ -159,8 +196,14 @@ export const useGroups = () => {
     }
   };
 
-  // Hapus kelompok di Supabase
+  // Hapus kelompok
   const deleteGroup = async (groupId: string) => {
+    if (isDemo) {
+      LocalStore.deleteGroup(groupId, 'usr-demo-faisal');
+      await fetchGroups();
+      return;
+    }
+
     if (!user || !isSupabaseConfigured) return;
 
     try {
