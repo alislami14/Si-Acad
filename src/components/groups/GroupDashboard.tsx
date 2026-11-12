@@ -55,7 +55,7 @@ export const GroupDashboard = ({
     <div className="space-y-6">
       {/* 1. "Giliran Kelompokmu" Banner if active */}
       {isMyGroupTurnThisWeek && (
-        <div className="relative overflow-hidden p-5 rounded-3xl bg-gradient-to-r from-[#7C9A76] to-[#627F5C] text-white shadow-lg shadow-[#7C9A76]/25 animate-in fade-in duration-300">
+        <div className="hero-banner relative overflow-hidden p-5 rounded-3xl bg-gradient-to-r from-[#7C9A76] to-[#627F5C] text-white shadow-lg shadow-[#7C9A76]/25 animate-in fade-in duration-300">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
             <div className="space-y-1">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-bold uppercase tracking-wider">

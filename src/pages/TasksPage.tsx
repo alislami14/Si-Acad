@@ -20,6 +20,7 @@ import Modal from '../components/ui/Modal';
 import Tabs from '../components/ui/Tabs';
 import EmptyState from '../components/ui/EmptyState';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
+import PageGuide from '../components/ui/PageGuide';
 import { isToday, isThisWeek, isPast, parseISO } from '../lib/dateUtils';
 
 export const TasksPage = () => {
@@ -211,6 +212,32 @@ export const TasksPage = () => {
           </Button>
         </div>
       </div>
+
+      {/* Panduan Halaman Tugas Kuliah */}
+      <PageGuide
+        id="tasks"
+        title="Panduan Manajemen Tugas & Deadline"
+        description="Kelola seluruh tugas kuliah, pantau tenggat waktu, dan atur prioritas pengerjaan agar tugas selesai tepat waktu."
+        steps={[
+          {
+            title: 'Buat Tugas Baru',
+            description: 'Klik tombol "Tugas Baru" untuk menentukan judul, mata kuliah terkait, batas tanggal & jam (WIB), serta prioritas.',
+          },
+          {
+            title: 'Saring dengan Filter',
+            description: 'Gunakan filter pencarian untuk menyaring tugas berdasarkan mata kuliah, tingkat urgensi, atau status pengerjaan.',
+          },
+          {
+            title: 'Mode Daftar & Kalender',
+            description: 'Beralih antara mode tampilan "Daftar" untuk melihat detail kartu atau mode "Kalender" untuk melihat sebaran tanggal deadline.',
+          },
+          {
+            title: 'Tandai Selesai',
+            description: 'Tekan ikon centang pada kartu tugas untuk memindahkan tugas ke kategori Selesai secara instan.',
+          },
+        ]}
+        tip="Gunakan tombol pintas cepat seperti 'Hari Ini (23:59)' atau 'Besok (23:59)' pada formulir tugas untuk mengatur deadline secara instan."
+      />
 
       {/* Main Content Area */}
       {viewMode === 'calendar' ? (

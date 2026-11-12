@@ -1,19 +1,21 @@
 import { useState, useEffect } from 'react';
-import { User, Bell, Save, CheckCircle2 } from 'lucide-react';
+import { User, Bell, Palette, Save, CheckCircle2 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import useNotifications from '../hooks/useNotifications';
 import NotificationSettings from '../components/notifications/NotificationSettings';
+import ThemeSettings from '../components/theme/ThemeSettings';
 import Tabs from '../components/ui/Tabs';
 import Card from '../components/ui/Card';
 import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
+import PageGuide from '../components/ui/PageGuide';
 import { Logo } from '../components/ui/Logo';
 
 export const SettingsPage = () => {
   const { profile, updateProfile } = useAuth();
   const { preferences, updatePreferences } = useNotifications();
 
-  const [activeTab, setActiveTab] = useState<'profile' | 'notifications'>('notifications');
+  const [activeTab, setActiveTab] = useState<'theme' | 'notifications' | 'profile'>('theme');
 
   // Profile form state
   const [fullName, setFullName] = useState(profile?.full_name || '');
@@ -51,6 +53,7 @@ export const SettingsPage = () => {
   };
 
   const tabs = [
+    { id: 'theme', label: 'Tema & Mode Tampilan', icon: <Palette className="w-4 h-4" /> },
     { id: 'notifications', label: 'Notifikasi & Pengingat', icon: <Bell className="w-4 h-4" /> },
     { id: 'profile', label: 'Profil Mahasiswa', icon: <User className="w-4 h-4" /> },
   ];
@@ -62,11 +65,39 @@ export const SettingsPage = () => {
           Pengaturan Aplikasi
         </h1>
         <p className="text-xs sm:text-sm text-[#627F5C] dark:text-[#93AC91] mt-0.5">
-          Atur preferensi pengingat Web Push dan biodata profil akademik
+          Atur tema tampilan, preferensi pengingat notifikasi, dan profil akademik
         </p>
       </div>
 
+      {/* Panduan Halaman Pengaturan */}
+      <PageGuide
+        id="settings"
+        title="Panduan Pengaturan & Preferensi"
+        description="Sesuaikan tema tampilan favorit, kelola data profil mahasiswa, dan konfigurasikan sistem notifikasi sesuai kebutuhan Anda."
+        steps={[
+          {
+            title: 'Prioritas 2 Mode Tampilan',
+            description: 'Pilih tepat 2 mode tema (Sage Light, Sage Dark, atau Pink Flamingo) yang akan menjadi tombol cepat di bar atas semua halaman.',
+          },
+          {
+            title: 'Pengaturan Notifikasi',
+            description: 'Atur jeda menit pengingat sebelum kelas dimulai atau batas deadline tugas agar Anda menerima alarm yang pas.',
+          },
+          {
+            title: 'Profil Mahasiswa',
+            description: 'Perbarui nama lengkap, NIM, universitas, dan program studi yang tersimpan di profil database Supabase.',
+          },
+          {
+            title: 'Keamanan Akun',
+            description: 'Data dan preferensi Anda tersimpan aman dengan proteksi Row Level Security (RLS) pada server cloud.',
+          },
+        ]}
+        tip="Pilihan 2 tema prioritas Anda akan otomatis tersimpan dan tetap aktif saat Anda keluar dan masuk kembali."
+      />
+
       <Tabs tabs={tabs} activeTab={activeTab} onChange={(t) => setActiveTab(t as typeof activeTab)} />
+
+      {activeTab === 'theme' && <ThemeSettings />}
 
       {activeTab === 'notifications' && (
         <NotificationSettings

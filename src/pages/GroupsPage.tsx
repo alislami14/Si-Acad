@@ -10,6 +10,7 @@ import Button from '../components/ui/Button';
 import Modal from '../components/ui/Modal';
 import EmptyState from '../components/ui/EmptyState';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
+import PageGuide from '../components/ui/PageGuide';
 
 export const GroupsPage = () => {
   const {
@@ -75,6 +76,32 @@ export const GroupsPage = () => {
           </Button>
         </div>
       </div>
+
+      {/* Panduan Halaman Kelompok Belajar */}
+      <PageGuide
+        id="groups"
+        title="Panduan Group Planner & Kelompok Belajar"
+        description="Kelola kelompok belajar untuk koordinasi tugas kuliah bersama, giliran presentasi, dan jadwal rotasi makalah kelompok."
+        steps={[
+          {
+            title: 'Bentuk Kelompok Baru',
+            description: 'Klik "Kelompok Baru" untuk membuat grup belajar untuk mata kuliah tertentu dan berikan nama serta deskripsi tugas.',
+          },
+          {
+            title: 'Undang Rekan Anggota',
+            description: 'Buka kartu kelompok dan bagikan kode undangan 6 karakter atau tautan link kepada teman sekelas.',
+          },
+          {
+            title: 'Gabung dengan Kode',
+            description: 'Jika rekan Anda sudah membuat kelompok, klik "Gabung Kelompok" dan masukkan kode undangan yang mereka berikan.',
+          },
+          {
+            title: 'Buka Detail Kelompok',
+            description: 'Klik kelompok Anda untuk mengatur giliran rotasi mingguan, agenda kerja kelompok, dan catatan perlengkapan.',
+          },
+        ]}
+        tip="Anda dapat membuat beberapa kelompok belajar untuk mata kuliah yang berbeda secara bersamaan."
+      />
 
       {/* Content */}
       {loading ? (

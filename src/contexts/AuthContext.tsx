@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect, ReactNode } from 'react
 import { User, Session } from '@supabase/supabase-js';
 import { supabase, isSupabaseConfigured } from '../config/supabase';
 import { Profile } from '../types/database';
+import { queryClient } from '../lib/queryClient';
 
 export interface SignUpResult {
   error: Error | null;
@@ -468,6 +469,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setSession(null);
     setProfile(null);
     localStorage.removeItem('siacad_supabase_active_user');
+    // Bersihkan seluruh cache in-memory data agar data pribadi pengguna tidak tersisa
+    queryClient.clear();
+    sessionStorage.clear();
     if (isSupabaseConfigured) {
       try {
         await supabase.auth.signOut();

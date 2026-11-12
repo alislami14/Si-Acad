@@ -16,9 +16,11 @@ import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
 import Modal from '../components/ui/Modal';
 import Input from '../components/ui/Input';
+import Select from '../components/ui/Select';
 import Tabs from '../components/ui/Tabs';
 import EmptyState from '../components/ui/EmptyState';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
+import PageGuide from '../components/ui/PageGuide';
 import ImportScheduleModal from '../components/schedule/ImportScheduleModal';
 import { ParsedKrsItem } from '../lib/krsParser';
 import { useAuth } from '../contexts/AuthContext';
@@ -396,6 +398,32 @@ export const SchedulePage = () => {
         </div>
       </div>
 
+      {/* Panduan Halaman Jadwal Kuliah */}
+      <PageGuide
+        id="schedule"
+        title="Panduan Pengelolaan Jadwal Kuliah"
+        description="Kelola seluruh jadwal perkuliahan mingguan per semester dan sinkronkan agenda kelas Anda secara teratur."
+        steps={[
+          {
+            title: 'Import KRS Excel Otomatis',
+            description: 'Unggah file Excel KRS portal kampus Anda untuk memasukkan seluruh mata kuliah & jadwal sekaligus dalam hitungan detik.',
+          },
+          {
+            title: 'Tambah Jadwal Manual',
+            description: 'Klik "+ Tambah Jadwal" untuk menentukan mata kuliah, hari kuliah, ruangan, serta jam mulai dan selesai.',
+          },
+          {
+            title: 'Navigasi Tab Hari',
+            description: 'Pilih tab hari (Senin s/d Minggu) untuk memeriksa mata kuliah pada hari tertentu secara fokus.',
+          },
+          {
+            title: 'Pengingat Otomatis',
+            description: 'Jadwal yang tersimpan akan otomatis memicu pengingat push notification sebelum perkuliahan dimulai.',
+          },
+        ]}
+        tip="Pastikan semester aktif Anda sudah sesuai pada pemilih semester di bar atas sebelum menambahkan jadwal baru."
+      />
+
       {/* Tabs Hari */}
       <div className="overflow-x-auto pb-2">
         <Tabs
@@ -606,42 +634,29 @@ export const SchedulePage = () => {
         size="md"
       >
         <form onSubmit={handleSaveSchedule} className="space-y-4">
-          <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
-              Pilih Mata Kuliah
-            </label>
-            <select
-              value={scheduleCourseId}
-              onChange={(e) => setScheduleCourseId(e.target.value)}
-              required
-              className="w-full px-3.5 py-2 text-sm rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181F18] text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#7C9A76]"
-            >
-              <option value="">Pilih Mata Kuliah...</option>
-              {courses.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name} ({c.code || c.lecturer})
-                </option>
-              ))}
-            </select>
-          </div>
+          <Select
+            label="Pilih Mata Kuliah"
+            placeholder="Pilih Mata Kuliah..."
+            value={scheduleCourseId}
+            onChange={(e) => setScheduleCourseId(e.target.value)}
+            required
+            options={courses.map((c) => ({
+              value: c.id,
+              label: c.name,
+              sublabel: c.lecturer ? `Dosen: ${c.lecturer}` : c.code || undefined,
+            }))}
+          />
 
           <div className="grid grid-cols-3 gap-3">
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
-                Hari
-              </label>
-              <select
-                value={scheduleDay}
-                onChange={(e) => setScheduleDay(parseInt(e.target.value))}
-                className="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181F18] text-gray-900 dark:text-gray-100"
-              >
-                {DAYS.map((d) => (
-                  <option key={d.id} value={d.id}>
-                    {d.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <Select
+              label="Hari"
+              value={String(scheduleDay)}
+              onChange={(e) => setScheduleDay(parseInt(e.target.value))}
+              options={DAYS.map((d) => ({
+                value: String(d.id),
+                label: d.name,
+              }))}
+            />
 
             <Input
               label="Jam Mulai"

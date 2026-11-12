@@ -90,6 +90,63 @@ export const getDeadlineBgColor = (status: ReturnType<typeof getDeadlineStatus>)
 /** Indonesian day names (Sunday = 0) */
 export const DAY_NAMES = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
 
+export const MONTH_NAMES_ID = [
+  'Januari',
+  'Februari',
+  'Maret',
+  'April',
+  'Mei',
+  'Juni',
+  'Juli',
+  'Agustus',
+  'September',
+  'Oktober',
+  'November',
+  'Desember',
+];
+
+export const MONTH_SHORT_ID = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'Mei',
+  'Jun',
+  'Jul',
+  'Agu',
+  'Sep',
+  'Okt',
+  'Nov',
+  'Des',
+];
+
+export const DAY_NAMES_ID = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+export const DAY_SHORT_ID = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
+export const DAY_SHORT_ACADEMIC = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'];
+
+/** Format date string (e.g. "2026-11-12T23:59") to Indonesian readable display: "Kamis, 12 Nov 2026 • 23:59 WIB" */
+export const formatIndonesianDisplay = (
+  dateStr?: string | null,
+  includeTime: boolean = true
+): string => {
+  if (!dateStr) return '';
+  try {
+    const d =
+      typeof dateStr === 'string'
+        ? dateStr.length === 10
+          ? new Date(`${dateStr}T00:00:00`)
+          : new Date(dateStr)
+        : dateStr;
+    if (isNaN(d.getTime())) return dateStr;
+    if (includeTime && dateStr.includes('T')) {
+      return format(d, "EEEE, d MMM yyyy • HH:mm 'WIB'", { locale: id });
+    }
+    return format(d, 'EEEE, d MMMM yyyy', { locale: id });
+  } catch {
+    return dateStr;
+  }
+};
+
 /** Get the start and end of the current week (Monday start) */
 export const getWeekRange = (date: Date = new Date()) => {
   const start = startOfWeek(date, { weekStartsOn: 1 });

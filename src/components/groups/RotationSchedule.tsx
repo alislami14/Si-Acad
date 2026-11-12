@@ -16,6 +16,9 @@ import Button from '../ui/Button';
 import Input from '../ui/Input';
 import Modal from '../ui/Modal';
 import Textarea from '../ui/Textarea';
+import Select from '../ui/Select';
+import DatePicker from '../ui/DatePicker';
+import DateTimePicker from '../ui/DateTimePicker';
 import { formatDate, isToday } from '../../lib/dateUtils';
 import { isWithinInterval, parseISO, startOfDay, endOfDay } from 'date-fns';
 
@@ -336,11 +339,11 @@ export const RotationSchedule = ({
             Sistem akan menghitung tanggal mulai dan akhir untuk setiap giliran kelompok secara otomatis berdasarkan interval yang ditentukan.
           </p>
 
-          <Input
+          <DatePicker
             label="Tanggal Mulai Rotasi (Minggu ke-1)"
-            type="date"
+            placeholder="Pilih tanggal mulai..."
             value={autoStartDate}
-            onChange={(e) => setAutoStartDate(e.target.value)}
+            onChange={setAutoStartDate}
             required
           />
 
@@ -398,18 +401,18 @@ export const RotationSchedule = ({
             onChange={(e) => setSlotOrder(parseInt(e.target.value) || 1)}
             required
           />
-          <Input
+          <DatePicker
             label="Tanggal Mulai"
-            type="date"
+            placeholder="Pilih tanggal mulai..."
             value={slotStartDate}
-            onChange={(e) => setSlotStartDate(e.target.value)}
+            onChange={setSlotStartDate}
             required
           />
-          <Input
+          <DatePicker
             label="Tanggal Selesai"
-            type="date"
+            placeholder="Pilih tanggal selesai..."
             value={slotEndDate}
-            onChange={(e) => setSlotEndDate(e.target.value)}
+            onChange={setSlotEndDate}
             required
           />
           <Textarea
@@ -444,30 +447,24 @@ export const RotationSchedule = ({
           />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Input
+            <DateTimePicker
               label="Tanggal & Jam Kegiatan"
-              type="datetime-local"
+              placeholder="Pilih tanggal & jam..."
               value={eventDate}
-              onChange={(e) => setEventDate(e.target.value)}
+              onChange={setEventDate}
               required
             />
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
-                Mata Kuliah Terkait
-              </label>
-              <select
-                value={eventCourseId}
-                onChange={(e) => setEventCourseId(e.target.value)}
-                className="w-full px-3.5 py-2 text-sm rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181F18] text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-[#7C9A76]"
-              >
-                <option value="">Pilih Mata Kuliah (Opsional)</option>
-                {courses.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <Select
+              label="Mata Kuliah Terkait"
+              placeholder="Pilih Mata Kuliah (Opsional)"
+              value={eventCourseId}
+              onChange={(e) => setEventCourseId(e.target.value)}
+              options={courses.map((c) => ({
+                value: c.id,
+                label: c.name,
+                sublabel: c.lecturer ? `Dosen: ${c.lecturer}` : c.code || undefined,
+              }))}
+            />
           </div>
 
           <Textarea

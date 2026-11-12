@@ -5,6 +5,7 @@ import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
 import { Logo } from '../components/ui/Logo';
+import { sanitizeUsername, sanitizeText } from '../lib/security';
 import {
   UserPlus,
   AlertCircle,
@@ -31,9 +32,9 @@ export const RegisterPage = () => {
     e.preventDefault();
     setError(null);
 
-    const cleanUser = username.trim().toLowerCase();
-    if (!cleanUser) {
-      setError('Silakan tentukan username Anda.');
+    const cleanUser = sanitizeUsername(username);
+    if (!cleanUser || cleanUser.length < 3) {
+      setError('Username minimal 3 karakter (hanya huruf, angka, titik, atau strip).');
       return;
     }
 
@@ -43,16 +44,16 @@ export const RegisterPage = () => {
     }
 
     if (password.length < 6) {
-      setError('Password minimal harus 6 karakter.');
+      setError('Password minimal harus 6 karakter demi keamanan akun Anda.');
       return;
     }
 
     setLoading(true);
 
     try {
-      const result = await signUp(cleanUser, password, fullName.trim(), {
+      const result = await signUp(cleanUser, password, sanitizeText(fullName), {
         isEmail: false,
-        studentId: studentId.trim() || '-',
+        studentId: sanitizeText(studentId) || '-',
       });
 
       if (result.error) {

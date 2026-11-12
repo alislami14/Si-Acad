@@ -1,4 +1,4 @@
-import { Sun, Moon, CalendarDays, Plus } from 'lucide-react';
+import { Sun, Moon, Flower2, CalendarDays, Plus } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useSemester } from '../../contexts/SemesterContext';
 import { NotificationBell } from './NotificationBell';
@@ -9,8 +9,29 @@ interface HeaderProps {
 }
 
 export const Header = ({ onOpenCreateSemester }: HeaderProps) => {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme, getNextTheme } = useTheme();
   const { semesters, activeSemester, setActiveSemester } = useSemester();
+
+  const nextTheme = getNextTheme();
+
+  // Helper render ikon sesuai tema aktif saat ini
+  const renderThemeIcon = () => {
+    switch (theme) {
+      case 'dark':
+        return <Moon className="w-5 h-5 text-sky-400 dark:text-sky-300 transition-transform duration-300 hover:rotate-12" />;
+      case 'flamingo':
+        return <Flower2 className="w-5 h-5 text-rose-500 transition-transform duration-300 hover:rotate-45 hover:scale-110" />;
+      case 'light':
+      default:
+        return <Sun className="w-5 h-5 text-amber-500 transition-transform duration-300 hover:rotate-45" />;
+    }
+  };
+
+  const getThemeLabel = () => {
+    const nextName = nextTheme === 'dark' ? 'Sage Dark' : nextTheme === 'flamingo' ? 'Pink Flamingo' : 'Sage Light';
+    const currentName = theme === 'dark' ? 'Sage Dark' : theme === 'flamingo' ? 'Pink Flamingo' : 'Sage Light';
+    return `Mode aktif: ${currentName}. Klik untuk beralih ke ${nextName}`;
+  };
 
   return (
     <header className="sticky top-0 z-30 flex min-h-16 w-full items-center justify-between border-b border-gray-200/80 dark:border-gray-800/80 bg-[#FAFAF7]/90 dark:bg-[#141814]/90 backdrop-blur-md px-4 sm:px-6 pt-[env(safe-area-inset-top,0px)]">
@@ -71,13 +92,14 @@ export const Header = ({ onOpenCreateSemester }: HeaderProps) => {
 
       {/* Right controls */}
       <div className="flex items-center gap-2 sm:gap-3">
-        {/* Dark/Light mode toggle */}
+        {/* Theme toggle button (bergantian antara 2 mode prioritas) */}
         <button
           onClick={toggleTheme}
-          aria-label={theme === 'dark' ? 'Ganti ke Mode Terang' : 'Ganti ke Mode Gelap'}
+          aria-label={getThemeLabel()}
+          title={getThemeLabel()}
           className="p-2 rounded-xl text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer"
         >
-          {theme === 'dark' ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5" />}
+          {renderThemeIcon()}
         </button>
 
         {/* Notifications */}

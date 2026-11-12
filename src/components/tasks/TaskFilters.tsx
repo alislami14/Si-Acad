@@ -1,6 +1,7 @@
 import { Search, Filter, X } from 'lucide-react';
 import { Course } from '../../types/database';
 import { TaskFiltersState } from '../../hooks/useTasks';
+import Select from '../ui/Select';
 
 interface TaskFiltersProps {
   filters: TaskFiltersState;
@@ -63,56 +64,54 @@ export const TaskFilters = ({ filters, onChange, courses }: TaskFiltersProps) =>
       {/* Dropdown Filters */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 border-t border-gray-100 dark:border-gray-800 text-xs">
         {/* Course Filter */}
-        <select
+        <Select
+          size="sm"
+          placeholder="Semua Mata Kuliah"
           value={filters.courseId}
           onChange={(e) => updateFilter('courseId', e.target.value)}
-          className="px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181F18] text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-1 focus:ring-[#7C9A76]"
-        >
-          <option value="">Semua Mata Kuliah</option>
-          {courses.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name}
-            </option>
-          ))}
-        </select>
+          options={courses.map((c) => ({ value: c.id, label: c.name }))}
+        />
 
         {/* Priority Filter */}
-        <select
+        <Select
+          size="sm"
+          placeholder="Semua Prioritas"
           value={filters.priority}
           onChange={(e) => updateFilter('priority', e.target.value)}
-          className="px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181F18] text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-1 focus:ring-[#7C9A76]"
-        >
-          <option value="">Semua Prioritas</option>
-          <option value="high">Tinggi</option>
-          <option value="normal">Normal</option>
-          <option value="low">Rendah</option>
-        </select>
+          options={[
+            { value: 'high', label: 'Tinggi' },
+            { value: 'normal', label: 'Normal' },
+            { value: 'low', label: 'Rendah' },
+          ]}
+        />
 
         {/* Status Filter */}
-        <select
+        <Select
+          size="sm"
+          placeholder="Semua Status"
           value={filters.status}
           onChange={(e) => updateFilter('status', e.target.value)}
-          className="px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181F18] text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-1 focus:ring-[#7C9A76]"
-        >
-          <option value="">Semua Status</option>
-          <option value="todo">Belum Dikerjakan</option>
-          <option value="in_progress">Sedang Dikerjakan</option>
-          <option value="done">Selesai</option>
-        </select>
+          options={[
+            { value: 'todo', label: 'Belum Dikerjakan' },
+            { value: 'in_progress', label: 'Sedang Dikerjakan' },
+            { value: 'done', label: 'Selesai' },
+          ]}
+        />
 
         {/* Timeframe Filter */}
-        <select
-          value={filters.timeframe}
-          onChange={(e) => updateFilter('timeframe', e.target.value as TaskFiltersState['timeframe'])}
-          className="px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181F18] text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-1 focus:ring-[#7C9A76]"
-        >
-          <option value="all">Semua Waktu</option>
-          <option value="today">Hari Ini</option>
-          <option value="week">Minggu Ini</option>
-          <option value="upcoming">Mendatang</option>
-          <option value="overdue">Lewat Deadline</option>
-          <option value="done">Sudah Selesai</option>
-        </select>
+        <Select
+          size="sm"
+          placeholder="Semua Waktu"
+          value={filters.timeframe === 'all' ? '' : filters.timeframe}
+          onChange={(e) => updateFilter('timeframe', (e.target.value || 'all') as TaskFiltersState['timeframe'])}
+          options={[
+            { value: 'today', label: 'Hari Ini' },
+            { value: 'week', label: 'Minggu Ini' },
+            { value: 'upcoming', label: 'Mendatang' },
+            { value: 'overdue', label: 'Lewat Deadline' },
+            { value: 'done', label: 'Sudah Selesai' },
+          ]}
+        />
       </div>
     </div>
   );

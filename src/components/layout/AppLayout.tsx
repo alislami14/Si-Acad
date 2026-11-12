@@ -5,6 +5,7 @@ import Header from './Header';
 import BottomNav from './BottomNav';
 import Modal from '../ui/Modal';
 import Input from '../ui/Input';
+import DatePicker from '../ui/DatePicker';
 import Button from '../ui/Button';
 import { useSemester } from '../../contexts/SemesterContext';
 
@@ -63,17 +64,17 @@ export const AppLayout = () => {
             required
           />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Input
+            <DatePicker
               label="Tanggal Mulai"
-              type="date"
+              placeholder="Pilih tanggal mulai..."
               value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
+              onChange={setStartDate}
             />
-            <Input
+            <DatePicker
               label="Tanggal Selesai"
-              type="date"
+              placeholder="Pilih tanggal selesai..."
               value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
+              onChange={setEndDate}
             />
           </div>
           <div className="flex justify-end gap-2 pt-2">

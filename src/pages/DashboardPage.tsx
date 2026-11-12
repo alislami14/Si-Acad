@@ -20,6 +20,7 @@ import useNotifications from '../hooks/useNotifications';
 import Card from '../components/ui/Card';
 import Button from '../components/ui/Button';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
+import PageGuide from '../components/ui/PageGuide';
 import { formatDate, formatDateTime, isToday, isPast, parseISO } from '../lib/dateUtils';
 import { Schedule } from '../types/database';
 import { supabase, isSupabaseConfigured } from '../config/supabase';
@@ -79,7 +80,7 @@ export const DashboardPage = () => {
   return (
     <div className="space-y-6">
       {/* 1. Welcoming Hero Banner */}
-      <div className="relative overflow-hidden p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-[#7C9A76] via-[#688562] to-[#4D6449] text-white shadow-lg shadow-[#7C9A76]/20">
+      <div className="hero-banner relative overflow-hidden p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-[#7C9A76] via-[#688562] to-[#4D6449] text-white shadow-lg shadow-[#7C9A76]/20">
         <div className="relative z-10 max-w-2xl space-y-2">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-semibold">
             <GraduationCap className="w-3.5 h-3.5 text-white/90" />
@@ -126,6 +127,32 @@ export const DashboardPage = () => {
         {/* Decorative blur */}
         <div className="absolute -right-12 -bottom-12 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none" />
       </div>
+
+      {/* Panduan Penggunaan Halaman Dasbor */}
+      <PageGuide
+        id="dashboard"
+        title="Panduan Dasbor Akademik"
+        description="Pusat kendali dan ringkasan aktivitas harian, jadwal kuliah aktif, serta pantauan tugas semester Anda."
+        steps={[
+          {
+            title: 'Jadwal Kuliah Hari Ini',
+            description: 'Memantau mata kuliah yang berlangsung hari ini beserta jam mulai, ruang kelas, dan dosen pengampu.',
+          },
+          {
+            title: 'Pantauan Deadline Tugas',
+            description: 'Melihat tugas mendesak dengan indikator warna status agar tidak terlewat batas pengumpulan.',
+          },
+          {
+            title: 'Statistik Progres Akademik',
+            description: 'Melihat jumlah SKS aktif, total mata kuliah yang diambil, serta persentase penyelesaian tugas.',
+          },
+          {
+            title: 'Akses Cepat Modul',
+            description: 'Gunakan tombol pada banner atas untuk langsung membuka Jadwal, Tugas Kuliah, atau Kelompok Belajar.',
+          },
+        ]}
+        tip="Anda dapat mengatur mode tampilan prioritas (Sage Light, Dark, atau Pink Flamingo) melalui menu Pengaturan."
+      />
 
       {/* 2. Informasi Semester untuk Pengguna Asli Baru (jika belum buat semester) */}
       {!isDemo && !activeSemester && (

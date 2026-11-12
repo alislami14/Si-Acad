@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Task, Course } from '../../types/database';
 import Input from '../ui/Input';
 import Select from '../ui/Select';
+import DateTimePicker from '../ui/DateTimePicker';
 import Textarea from '../ui/Textarea';
 import Button from '../ui/Button';
 
@@ -60,19 +61,20 @@ export const TaskForm = ({
 
   const courseOptions = courses.map((c) => ({
     value: c.id,
-    label: `${c.name} (${c.code || c.lecturer || 'Mata Kuliah'})`,
+    label: c.name,
+    sublabel: c.lecturer ? `Dosen: ${c.lecturer}` : c.code || undefined,
   }));
 
   const priorityOptions = [
-    { value: 'low', label: 'Rendah (Santai)' },
-    { value: 'normal', label: 'Normal (Standar)' },
-    { value: 'high', label: 'Tinggi (Penting & Mendesak)' },
+    { value: 'low', label: 'Rendah (Santai)', badge: 'Santai' },
+    { value: 'normal', label: 'Normal (Standar)', badge: 'Standar' },
+    { value: 'high', label: 'Tinggi (Penting & Mendesak)', badge: 'Prioritas' },
   ];
 
   const statusOptions = [
-    { value: 'todo', label: 'Belum Dikerjakan' },
-    { value: 'in_progress', label: 'Sedang Dikerjakan' },
-    { value: 'done', label: 'Selesai' },
+    { value: 'todo', label: 'Belum Dikerjakan', badge: 'To-Do' },
+    { value: 'in_progress', label: 'Sedang Dikerjakan', badge: 'Proses' },
+    { value: 'done', label: 'Selesai', badge: 'Done' },
   ];
 
   return (
@@ -94,11 +96,11 @@ export const TaskForm = ({
           onChange={(e) => setCourseId(e.target.value)}
         />
 
-        <Input
+        <DateTimePicker
           label="Tanggal & Jam Deadline"
-          type="datetime-local"
+          placeholder="Pilih tanggal & jam deadline..."
           value={deadline}
-          onChange={(e) => setDeadline(e.target.value)}
+          onChange={setDeadline}
         />
       </div>
 

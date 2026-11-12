@@ -22,6 +22,7 @@ import Tabs from '../components/ui/Tabs';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
 import LoadingSpinner from '../components/ui/LoadingSpinner';
+import PageGuide from '../components/ui/PageGuide';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../config/supabase';
 
@@ -124,6 +125,32 @@ export const GroupDetailPage = () => {
           </Button>
         </div>
       </div>
+
+      {/* Panduan Halaman Detail Kelompok */}
+      <PageGuide
+        id="group-detail"
+        title="Panduan Rotasi & Pengelolaan Kelompok"
+        description="Atur giliran tugas kelompok per pekan, jadwalkan agenda pertemuan, dan kelola peran seluruh anggota tim."
+        steps={[
+          {
+            title: 'Tab Ringkasan (Dasbor)',
+            description: 'Melihat giliran kelompok yang sedang aktif pekan ini, jadwal giliran berikutnya, dan agenda terdekat.',
+          },
+          {
+            title: 'Tab Jadwal Rotasi',
+            description: 'Gunakan tombol "Buat Rotasi Otomatis" untuk menjadwalkan pembagian urutan giliran presentasi secara adil.',
+          },
+          {
+            title: 'Agenda & Catatan Kelompok',
+            description: 'Tambahkan agenda pertemuan persiapan tugas, pembagian materi, atau perlengkapan yang perlu dibawa saat presentasi.',
+          },
+          {
+            title: 'Tab Anggota & Hak Akses',
+            description: 'Memantau seluruh anggota yang telah bergabung dan mengatur siapa yang bertindak sebagai ketua kelompok.',
+          },
+        ]}
+        tip="Gunakan tombol 'Undang' di bagian atas untuk menyalin link atau kode 6 karakter jika ada anggota baru yang ingin bergabung."
+      />
 
       {/* Tabs */}
       <Tabs tabs={tabs} activeTab={activeTab} onChange={(t) => setActiveTab(t as typeof activeTab)} />

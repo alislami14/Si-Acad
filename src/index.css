@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
+@custom-variant flamingo (&:where(.flamingo, .flamingo *));
 
 @theme {
   --font-serif: 'Cormorant Garamond', 'Lora', serif;
@@ -83,6 +84,164 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 
 .font-serif {
   font-family: 'Cormorant Garamond', serif;
+}
+
+/* ==========================================================================
+   PINK FLAMINGO THEME
+   Nuansa Pink Flamingo dengan aksen bunga, blush warmth, dan keanggunan floral
+   ========================================================================== */
+html.flamingo {
+  color-scheme: light;
+}
+
+html.flamingo body, :root.flamingo body {
+  background-color: #FFF5F7 !important;
+  color: #381E24 !important;
+}
+
+/* Background & Surfaces */
+html.flamingo .bg-\[\#FAFAF7\] {
+  background-color: #FFF5F7 !important;
+}
+
+html.flamingo .bg-\[\#FAFAF7\]\/90,
+html.flamingo .bg-\[\#FAFAF7\]\/95 {
+  background-color: rgba(255, 245, 247, 0.94) !important;
+}
+
+html.flamingo header,
+html.flamingo aside,
+html.flamingo nav {
+  background-color: rgba(255, 245, 247, 0.94) !important;
+  border-color: rgba(245, 198, 210, 0.85) !important;
+}
+
+html.flamingo .bg-white {
+  background-color: #FFFFFF !important;
+}
+
+/* Primary Accents (Sage Green -> Flamingo Pink #E05A7B) */
+html.flamingo .text-\[\#7C9A76\] {
+  color: #E05A7B !important;
+}
+
+html.flamingo .bg-\[\#7C9A76\] {
+  background-color: #E05A7B !important;
+  color: #FFFFFF !important;
+}
+
+html.flamingo .border-\[\#7C9A76\] {
+  border-color: #E05A7B !important;
+}
+
+html.flamingo .hover\:bg-\[\#7C9A76\]:hover {
+  background-color: #D44D6E !important;
+}
+
+html.flamingo .hover\:text-\[\#7C9A76\]:hover {
+  color: #D44D6E !important;
+}
+
+html.flamingo .text-\[\#627F5C\] {
+  color: #A33A52 !important;
+}
+
+html.flamingo .text-\[\#4D6449\] {
+  color: #8C2940 !important;
+}
+
+html.flamingo .text-\[\#5B7A55\] {
+  color: #B83857 !important;
+}
+
+html.flamingo .bg-\[\#E6EDE5\],
+html.flamingo .bg-\[\#EBF3E8\] {
+  background-color: #FFE6ED !important;
+}
+
+html.flamingo .text-\[\#2C4927\] {
+  color: #A82D4B !important;
+}
+
+html.flamingo .hover\:bg-\[\#EBF3E8\]:hover,
+html.flamingo .hover\:bg-\[\#F4F7F2\]:hover,
+html.flamingo .hover\:bg-\[\#F2F7F0\]:hover {
+  background-color: #FFF0F4 !important;
+}
+
+html.flamingo .ring-\[\#7C9A76\],
+html.flamingo .ring-\[\#7C9A76\]\/30,
+html.flamingo .ring-\[\#7C9A76\]\/50 {
+  --tw-ring-color: #E05A7B !important;
+}
+
+html.flamingo .border-\[\#B2C5B0\] {
+  border-color: #F8B4C4 !important;
+}
+
+html.flamingo .focus\:ring-\[\#7C9A76\]:focus {
+  --tw-ring-color: #E05A7B !important;
+}
+
+html.flamingo .shadow-\[\#7C9A76\]\/20,
+html.flamingo .shadow-\[\#7C9A76\]\/25,
+html.flamingo .shadow-\[\#7C9A76\]\/30 {
+  --tw-shadow-color: rgba(224, 90, 123, 0.25) !important;
+}
+
+/* Borders in Flamingo */
+html.flamingo .border-gray-200\/80,
+html.flamingo .border-gray-200 {
+  border-color: rgba(245, 198, 210, 0.8) !important;
+}
+
+/* Form inputs & focus rings */
+html.flamingo input:focus,
+html.flamingo select:focus,
+html.flamingo textarea:focus {
+  border-color: #E05A7B !important;
+}
+
+/* ==========================================================================
+   HERO BANNERS IN PINK FLAMINGO
+   ========================================================================== */
+html.flamingo .hero-banner,
+html.flamingo div[class*="from-[#7C9A76]"] {
+  background: linear-gradient(135deg, #E86384 0%, #D44D6E 48%, #A82D4B 100%) !important;
+  box-shadow: 0 10px 25px -5px rgba(224, 90, 123, 0.35), 0 8px 10px -6px rgba(224, 90, 123, 0.25) !important;
+  border-color: rgba(245, 198, 210, 0.5) !important;
+}
+
+html.flamingo .hero-banner a.bg-white,
+html.flamingo div[class*="from-[#7C9A76]"] a.bg-white {
+  background-color: #FFFFFF !important;
+  color: #A82D4B !important;
+}
+
+html.flamingo .hero-banner a.bg-white:hover,
+html.flamingo div[class*="from-[#7C9A76]"] a.bg-white:hover {
+  background-color: #FFF0F4 !important;
+}
+
+html.flamingo .hero-banner a.bg-white svg,
+html.flamingo div[class*="from-[#7C9A76]"] a.bg-white svg {
+  color: #E05A7B !important;
+}
+
+html.flamingo .hero-banner a.bg-white\/20,
+html.flamingo div[class*="from-[#7C9A76]"] a.bg-white\/20 {
+  background-color: rgba(255, 255, 255, 0.22) !important;
+  color: #FFFFFF !important;
+}
+
+html.flamingo .hero-banner a.bg-white\/20:hover,
+html.flamingo div[class*="from-[#7C9A76]"] a.bg-white\/20:hover {
+  background-color: rgba(255, 255, 255, 0.32) !important;
+}
+
+html.flamingo .hero-banner div.bg-white\/20,
+html.flamingo div[class*="from-[#7C9A76]"] div.bg-white\/20 {
+  background-color: rgba(255, 255, 255, 0.25) !important;
 }
 
 /* Mencegah auto-zoom yang mengganggu di iOS Safari saat fokus ke input */
