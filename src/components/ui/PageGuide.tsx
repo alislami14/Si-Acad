@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { BookOpen, ChevronDown, ChevronUp, Info, HelpCircle } from 'lucide-react';
+import { useState } from 'react';
+import { BookOpen, ChevronDown, ChevronUp, Info } from 'lucide-react';
 
 export interface GuideStep {
   title: string;
@@ -150,3 +150,4 @@ export const PageGuide = ({
 };
 
 export default PageGuide;
+
